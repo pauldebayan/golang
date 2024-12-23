@@ -1,5 +1,8 @@
 package main // mandatory
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // Starting point - main
 
@@ -11,32 +14,54 @@ var taskTwo = "Task List 2"
 // Arrays and Slices:
 var taskItems = []string{taskOne, taskTwo}
 
+// func main() {
+// 	fmt.Print("Hello World!\n") //printn will give the new line by default
+
+// 	fmt.Println(taskOne)
+// 	fmt.Println(taskTwo)
+
+// 	fmt.Println("Tasks: ", taskItems)
+
+// 	// Loops:
+
+// 	// for index, task := range taskItems { //  index -> _
+// 	// 	//fmt.Println(index+1, ".", task) // Space around '.'
+// 	// 	fmt.Printf("%d. %s\n", index+1, task)
+// 	// }
+
+// 	// Functions:
+// 	var maxItems = 20
+// 	printTasks(taskItems, maxItems)
+
+// 	// Function Parameters:
+
+// 	taskItems = addTasks("Go for a run")
+
+// 	printTasks(taskItems, maxItems)
+
+// 	// Compilation error if variables are not used
+
+// }
+
 func main() {
-	fmt.Print("Hello World!\n") //printn will give the new line by default
+	// Local Server
+	fmt.Println("Http Server")
 
-	fmt.Println(taskOne)
-	fmt.Println(taskTwo)
+	http.HandleFunc("/hello-go", func(w http.ResponseWriter, r *http.Request) {
+		var greeting = "Hello user welcome to out ToDo list App!"
+		fmt.Fprintf(w, greeting)
+	})
 
-	fmt.Println("Tasks: ", taskItems)
+	http.HandleFunc("/show-tasks", func(w http.ResponseWriter, r *http.Request) {
 
-	// Loops:
+		for _, item := range taskItems {
+			fmt.Fprintf(w, item)
+		}
+		//  curl localhost:8080/show-tasks will also work
+	})
 
-	// for index, task := range taskItems { //  index -> _
-	// 	//fmt.Println(index+1, ".", task) // Space around '.'
-	// 	fmt.Printf("%d. %s\n", index+1, task)
-	// }
-
-	// Functions:
-	var maxItems = 20
-	printTasks(taskItems, maxItems)
-
-	// Function Parameters:
-
-	taskItems = addTasks("Go for a run")
-
-	printTasks(taskItems, maxItems)
-
-	// Compilation error if variables are not used
+	// Similar to 'fmt' there is 'http', golang will automatically import it
+	http.ListenAndServe(":8080", nil) // 2nd parameter is the handler - what if something goes wrong
 
 }
 
